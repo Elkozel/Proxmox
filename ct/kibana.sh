@@ -13,7 +13,6 @@ cat <<"EOF"
   / ,<  / / __ \/ __ `/ __ \/ __ `/
  / /| |/ / /_/ / /_/ / / / / /_/ / 
 /_/ |_/_/_.___/\__,_/_/ /_/\__,_/  
-                                   
 EOF
 }
 header_info
@@ -53,27 +52,28 @@ function default_settings() {
 }
 
 function update_script() {
-  header_info
-  if [[ ! -f /etc/systemd/system/elasticsearch.service ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-  if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
-    read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
-    [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
-  fi
+header_info
+if [[ ! -f /etc/systemd/system/elasticsearch.service ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
+if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
+  read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
+  [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
+fi
 
-  msg_info "Stopping ${APP}"
-  $STD /bin/systemctl stop  kibana.service
-  msg_ok "Stopped ${APP}"
+msg_info "Stopping ${APP}"
+systemctl stop kibana
+msg_ok "Stopped ${APP}"
 
-  msg_info "Updating ${APP}"
-  $STD apt-get install kibana &>/dev/null
-  msg_ok "Updated ${APP}"
+msg_info "Updating ${APP} LXC"
+apt-get update &>/dev/null
+apt-get -y upgrade &>/dev/null
+msg_ok "Updated ${APP} LXC"
 
-  msg_info "Starting ${APP}"
-  $STD /bin/systemctl restart  kibana.service
-  msg_ok "Started ${APP}"
+msg_info "Starting ${APP}"
+systemctl start kibana
+msg_ok "Started ${APP}"
 
-  msg_ok "Updated Successfully"
-  exit
+msg_ok "Updated Successfully"
+exit
 }
 
 start
