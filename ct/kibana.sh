@@ -8,12 +8,12 @@ source <(curl -s https://raw.githubusercontent.com/ELKozel/Proxmox/main/misc/bui
 function header_info {
 clear
 cat <<"EOF"
- _  ___ _                       
-| |/ (_) |__   __ _ _ __   __ _ 
-| ' /| | '_ \ / _` | '_ \ / _` |
-| . \| | |_) | (_| | | | | (_| |
-|_|\_\_|_.__/ \__,_|_| |_|\__,_|
-
+    __ __ _ __                     
+   / //_/(_) /_  ____ _____  ____ _
+  / ,<  / / __ \/ __ `/ __ \/ __ `/
+ / /| |/ / /_/ / /_/ / / / / /_/ / 
+/_/ |_/_/_.___/\__,_/_/ /_/\__,_/  
+                                   
 EOF
 }
 header_info
