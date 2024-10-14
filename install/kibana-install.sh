@@ -35,7 +35,7 @@ $STD apt-get install kibana
 msg_ok "Installed Kibana"
 
 msg_info "Creating Service"
-cat <<EOF >/etc/systemd/system/kibana.service
+cat <<EOF >/etc/systemd/system/Kibana.service
 [Unit]
 Description=Kibana
 Documentation=https://www.elastic.co/guide/en/kibana/8.15/index.html
@@ -69,7 +69,7 @@ StandardError=inherit
 [Install]
 WantedBy=multi-user.target
 EOF
-$STD systemctl enable --now kibana
+systemctl enable -q --now Kibana.service
 msg_ok "Created Service"
 
 motd_ssh
