@@ -60,18 +60,10 @@ if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
   [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
 fi
 
-msg_info "Stopping ${APP}"
-systemctl stop Kibana
-msg_ok "Stopped ${APP}"
-
 msg_info "Updating ${APP} LXC"
 apt-get update &>/dev/null
 apt-get -y upgrade &>/dev/null
 msg_ok "Updated ${APP} LXC"
-
-msg_info "Starting ${APP}"
-systemctl start Kibana
-msg_ok "Started ${APP}"
 
 msg_ok "Updated Successfully"
 exit
