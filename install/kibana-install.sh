@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
 # Copyright (c) 2021-2024 tteck
-# Author: T.H. (ELKozel)
+# Author: tteck (tteckster)
+# Co-Author: T.H. (ELKozel)
 # License: MIT
 # https://github.com/tteck/Proxmox/raw/main/LICENSE
 
@@ -55,6 +56,7 @@ RestartSec=3
 
 StartLimitBurst=3
 StartLimitInterval=60
+
 
 WorkingDirectory=/usr/share/kibana
 
