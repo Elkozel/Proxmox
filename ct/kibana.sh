@@ -75,7 +75,7 @@ build_container
 description
 
 echo "${APP} is currently only reachable from localhost."
-read -r -p "${APP} is currently only reachable from localhost. Would you like to configure it? <y/N>" prompt
+read -r -p "Would you like to make it accessible from other hosts? <y/N>" prompt
 if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
 read -r -p "Please provide the hostname ${APP} should use? [default: ${IP}]: " hostname
 hostname=${hostname:-${IP}}
