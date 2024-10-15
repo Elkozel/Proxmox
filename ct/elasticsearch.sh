@@ -70,15 +70,14 @@ exit
 }
 
 function ask_extend_mmap() {
-  echo "Elasticsearch recommends extending the vm.max_map_count on the host"
-  read -r -p "Would you like to extend mmap count? <y/N>" prompt
-  if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
-    msg_info "Extending mmap count"
-    # Check if the setting is defined
-    if ! grep -q "vm.max_map_count" /etc/sysctl.conf; then
+  if ! grep -q "vm.max_map_count" /etc/sysctl.conf; then
+    echo "Elasticsearch recommends extending the vm.max_map_count on the host"
+    read -r -p "Would you like to extend mmap count? <y/N>" prompt
+    if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
+      msg_info "Extending mmap count"
       echo "vm.max_map_count=262144" >>/etc/sysctl.conf
+      msg_ok "Extended mmap count"
     fi
-    msg_ok "Extended mmap count"
   fi
 }
 
