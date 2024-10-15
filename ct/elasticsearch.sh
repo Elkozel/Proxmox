@@ -20,7 +20,7 @@ EOF
 header_info
 echo -e "Loading..."
 APP="Elasticsearch"
-var_disk="16"
+var_disk="6"
 var_cpu="4"
 var_ram="4096"
 var_os="debian"
