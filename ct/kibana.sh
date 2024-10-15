@@ -75,7 +75,7 @@ build_container
 description
 
 msg_ok "Completed Successfully!\n"
-echo -e "${APP} is installed! For security purposes, ${APP} is only reachable trough localhost. \n
-          To access the ${APP} dashboard, please adjust ${BL}server.host${CL} in ${BL}/etc/kibana/kibana.yml${CL}.
-          After that, ${APP} should bre reachable at
+echo -e "${APP} is installed! For security purposes, ${APP} is only reachable from localhost.\n
+To access the ${APP} dashboard, please adjust ${BL}server.host${CL} in ${BL}/etc/kibana/kibana.yml${CL}.\n
+After that, ${APP} should bre reachable at
          ${BL}http://${IP}:5601${CL} \n"
