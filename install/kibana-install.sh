@@ -72,11 +72,11 @@ msg_ok "Created Service"
 motd_ssh
 customize
 
-echo "${APP} is currently only reachable from localhost."
+echo "Kibana is currently only reachable from localhost."
 read -r -p "Would you like to make it accessible from other hosts? <y/N>" prompt
 if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
 IP=$(hostname -I | awk '{print $1}')
-read -r -p "Please provide the hostname ${APP} should use? [default: ${IP}]: " hostname
+read -r -p "Please provide the hostname Kibana should use? [default: ${IP}]: " hostname
 hostname=${hostname:-${IP}}
 
 msg_info "Configuring hostname"
