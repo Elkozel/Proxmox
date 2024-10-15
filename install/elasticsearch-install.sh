@@ -58,7 +58,7 @@ WorkingDirectory=/usr/share/elasticsearch
 User=elasticsearch
 Group=elasticsearch
 
-ExecStart=/usr/share/elasticsearch/bin/systemd-entrypoint -p ${PID_DIR}/elasticsearch.pid --quiet
+ExecStart=/usr/share/elasticsearch/bin/systemd-entrypoint -p \${PID_DIR}/elasticsearch.pid --quiet
 
 StandardOutput=journal
 StandardError=inherit
