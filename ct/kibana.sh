@@ -74,17 +74,6 @@ start
 build_container
 description
 
-echo "${APP} is currently only reachable from localhost."
-read -r -p "Would you like to make it accessible from other hosts? <y/N>" prompt
-if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
-read -r -p "Please provide the hostname ${APP} should use? [default: ${IP}]: " hostname
-hostname=${hostname:-${IP}}
-
-msg_info "Configuring hostname"
-sed -i -E "s/#server.host: \"\w+\"/server.host: \"${hostname}\"/" /etc/kibana/kibana.yml
-msg_ok "Configured hostname"
-fi
-
 msg_ok "Completed Successfully!\n"
 echo -e "${APP} is installed! For security purposes, ${APP} is only reachable from localhost.\n
 To access the ${APP} dashboard, please adjust ${BL}server.host${CL} in ${BL}/etc/kibana/kibana.yml${CL}.\n

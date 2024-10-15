@@ -72,6 +72,18 @@ msg_ok "Created Service"
 motd_ssh
 customize
 
+echo "${APP} is currently only reachable from localhost."
+read -r -p "Would you like to make it accessible from other hosts? <y/N>" prompt
+if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
+IP=$(hostname -I | awk '{print $1}')
+read -r -p "Please provide the hostname ${APP} should use? [default: ${IP}]: " hostname
+hostname=${hostname:-${IP}}
+
+msg_info "Configuring hostname"
+sed -i -E "s/#server.host: \"\w+\"/server.host: \"${hostname}\"/" /etc/kibana/kibana.yml
+msg_ok "Configured hostname"
+fi
+
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
 $STD apt-get -y autoclean
