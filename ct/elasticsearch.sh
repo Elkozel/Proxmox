@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 source <(curl -s https://raw.githubusercontent.com/ELKozel/Proxmox/main/misc/build.func)
-# Copyright (c) 2024 ELKozel
-# Author: T.H. (ELKozel)
+# Copyright (c) 2021-2024 tteck
+# Author: tteck (tteckster)
+# Co-Author: T.H. (ELKozel)
 # License: MIT
 # https://github.com/tteck/Proxmox/raw/main/LICENSE
 
 function header_info {
 clear
 cat <<"EOF"
- _____ _           _   _                              _     
-| ____| | __ _ ___| |_(_) ___ ___  ___  __ _ _ __ ___| |__  
-|  _| | |/ _` / __| __| |/ __/ __|/ _ \/ _` | '__/ __| '_ \ 
-| |___| | (_| \__ \ |_| | (__\__ \  __/ (_| | | | (__| | | |
-|_____|_|\__,_|___/\__|_|\___|___/\___|\__,_|_|  \___|_| |_|
-
+    ________           __  _                                __  
+   / ____/ /___ ______/ /_(_)____________  ____ ___________/ /_ 
+  / __/ / / __ `/ ___/ __/ / ___/ ___/ _ \/ __ `/ ___/ ___/ __ \
+ / /___/ / /_/ (__  ) /_/ / /__(__  )  __/ /_/ / /  / /__/ / / /
+/_____/_/\__,_/____/\__/_/\___/____/\___/\__,_/_/   \___/_/ /_/ 
+                                                                
 EOF
 }
 header_info
@@ -53,27 +54,19 @@ function default_settings() {
 }
 
 function update_script() {
-  header_info
-  if [[ ! -f /etc/systemd/system/elasticsearch.service ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
-  if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
-    read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
-    [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
-  fi
+header_info
+if [[ ! -f /etc/systemd/system/Elasticsearch.service ]]; then msg_error "No ${APP} Installation Found!"; exit; fi
+if (( $(df /boot | awk 'NR==2{gsub("%","",$5); print $5}') > 80 )); then
+  read -r -p "Warning: Storage is dangerously low, continue anyway? <y/N> " prompt
+  [[ ${prompt,,} =~ ^(y|yes)$ ]] || exit
+fi
 
-  msg_info "Stopping ${APP}"
-  $STD /bin/systemctl stop elasticsearch.service
-  msg_ok "Stopped ${APP}"
+msg_info "Updating ${APP} LXC"
+apt-get update &>/dev/null
+apt-get -y upgrade &>/dev/null
+msg_ok "Updated ${APP} LXC"
 
-  msg_info "Updating ${APP}"
-  $STD apt-get install elasticsearch &>/dev/null
-  msg_ok "Updated ${APP}"
-
-  msg_info "Starting ${APP}"
-  $STD /bin/systemctl restart elasticsearch.service
-  msg_ok "Started ${APP}"
-
-  msg_ok "Updated Successfully"
-  exit
+exit
 }
 
 function ask_extend_mmap() {
@@ -81,10 +74,9 @@ function ask_extend_mmap() {
   read -r -p "Would you like to extend mmap count? <y/N>" prompt
   if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
     msg_info "Extending mmap count"
-    sysctl -w vm.max_map_count=262144 >/dev/null
-    # Check if the setting is persistent
+    # Check if the setting is defined
     if ! grep -q "vm.max_map_count" /etc/sysctl.conf; then
-      echo "vm.max_map_count=262144" >> /etc/sysctl.conf
+      echo "vm.max_map_count=262144" >>/etc/sysctl.conf
     fi
     msg_ok "Extended mmap count"
   fi
@@ -106,7 +98,7 @@ msg_ok "Configured User"
 msg_info "Checking Health"
 ELASTIC_PORT=9200
 curl -s -XGET --insecure --fail --user $ELASTIC_USER:$ELASTIC_PASSWORD https://${IP}:$ELASTIC_PORT/_cluster/health?pretty >/dev/null
-msg_ok "Checked Health"
+msg_ok "Cluster is healthy"
 
 msg_ok "Completed Successfully!\n"
 echo -e "${APP} is installed, you can check it's health by running:
