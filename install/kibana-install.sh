@@ -62,7 +62,6 @@ RestartSec=3
 StartLimitBurst=3
 StartLimitInterval=60
 
-
 WorkingDirectory=/usr/share/kibana
 
 StandardOutput=journal
