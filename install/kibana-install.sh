@@ -30,6 +30,11 @@ $STD apt-get update
 $STD apt-get install -y kibana
 msg_ok "Installed Kibana"
 
+msg_info "Configuring hostname"
+IP=$(hostname -I | awk '{print $1}')
+sed -i -E "s/#server.host: \"localhost\"/server.host: \"${IP}\"/" /etc/kibana/kibana.yml
+msg_ok "Configured hostname"
+
 msg_info "Creating Service"
 cat <<EOF >/etc/systemd/system/Kibana.service
 [Unit]
@@ -71,16 +76,6 @@ msg_ok "Created Service"
 
 motd_ssh
 customize
-
-
-msg_info "Configuring hostname"
-IP=$(hostname -I | awk '{print $1}')
-sed -i -E "s/#server.host: \"localhost\"/server.host: \"${IP}\"/" /etc/kibana/kibana.yml
-msg_ok "Configured hostname"
-
-msg_info "Printing all environment variables"
-printenv
-msg_ok "Printed all environment variables"
 
 msg_info "Cleaning up"
 $STD apt-get -y autoremove
