@@ -30,10 +30,6 @@ $STD apt-get update
 $STD apt-get install -y elasticsearch
 msg_ok "Installed Elastcisearch"
 
-msg_info "Listing Environment Variables"
-printenv
-msg_ok "Listed Environment Variables"
-
 msg_info "Configuring Elasticsearch Memory"
 sed -i -E 's/## -Xms[0-9]+[Ggm]/-Xms3g/' /etc/elasticsearch/jvm.options
 sed -i -E 's/## -Xmx[0-9]+[Ggm]/-Xmx3g/' /etc/elasticsearch/jvm.options
