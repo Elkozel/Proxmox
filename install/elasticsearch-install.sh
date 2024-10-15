@@ -36,10 +36,51 @@ sed -i -E 's/## -Xmx[0-9]+[Ggm]/-Xmx3g/' /etc/elasticsearch/jvm.options
 msg_ok "Elastcisearch Configured to use 3GB of RAM"
 
 msg_info "Creating Service"
-# cat <<EOF >/etc/systemd/system/Elasticsearch.service
+cat <<EOF >/etc/systemd/system/Elasticsearch.service
+[Unit]
+Description=Elasticsearch
+Wants=network-online.target
+After=network-online.target
 
-# EOF
-# systemctl enable -q --now Elasticsearch.service
+[Service]
+Type=notify
+NotifyAccess=all
+RuntimeDirectory=elasticsearch
+PrivateTmp=true
+Environment=ES_HOME=/usr/share/elasticsearch
+Environment=ES_PATH_CONF=/etc/elasticsearch
+Environment=PID_DIR=/var/run/elasticsearch
+Environment=ES_SD_NOTIFY=true
+EnvironmentFile=-/etc/default/elasticsearch
+
+WorkingDirectory=/usr/share/elasticsearch
+
+User=elasticsearch
+Group=elasticsearch
+
+ExecStart=/usr/share/elasticsearch/bin/systemd-entrypoint -p ${PID_DIR}/elasticsearch.pid --quiet
+
+StandardOutput=journal
+StandardError=inherit
+
+LimitNOFILE=65535
+LimitNPROC=4096
+LimitAS=infinity
+LimitFSIZE=infinity
+
+TimeoutStopSec=0
+
+KillSignal=SIGTERM
+KillMode=process
+SendSIGKILL=no
+SuccessExitStatus=143
+
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable -q --now Elasticsearch.service
 msg_ok "Created Service"
 
 motd_ssh
