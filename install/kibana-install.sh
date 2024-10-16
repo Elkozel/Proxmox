@@ -31,8 +31,7 @@ $STD apt-get install -y kibana
 msg_ok "Installed Kibana"
 
 msg_info "Configuring hostname"
-IP=$(hostname -I | awk '{print $1}')
-sed -i -E "s/#server.host: \"localhost\"/server.host: \"${IP}\"/" /etc/kibana/kibana.yml
+sed -i -E "s/#server.host: \"localhost\"/server.host: \"0.0.0.0\"/" /etc/kibana/kibana.yml
 msg_ok "Configured hostname"
 
 msg_info "Creating Service"
