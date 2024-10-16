@@ -28,6 +28,7 @@ msg_ok "Set up Elastic Repository"
 msg_info "Installing Kibana"
 $STD apt-get update
 $STD apt-get install -y kibana
+echo 'export PATH=/usr/share/kibana/bin:$PATH' >>~/.bashrc
 msg_ok "Installed Kibana"
 
 msg_info "Configuring hostname"
