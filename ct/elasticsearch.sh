@@ -70,13 +70,15 @@ exit
 }
 
 function ask_extend_mmap() {
+  # Check if max_map_count setting is set in sysctl.conf (It is not set by default)
+  # so if it is set, we don't want to override what the user has set
   if ! grep -q "vm.max_map_count" /etc/sysctl.conf; then
     echo "Elasticsearch recommends extending the vm.max_map_count on the host"
     read -r -p "Would you like to extend mmap count? <y/N>" prompt
     if [[ ${prompt,,} =~ ^(y|yes)$ ]]; then
-      msg_info "Extending mmap count"
+      msg_info "Extending max mmap count"
       echo "vm.max_map_count=262144" >>/etc/sysctl.conf
-      msg_ok "Extended mmap count"
+      msg_ok "Extended max mmap count"
     fi
   fi
 }
@@ -100,8 +102,8 @@ curl -s -XGET --insecure --fail --user $ELASTIC_USER:$ELASTIC_PASSWORD https://$
 msg_ok "Cluster is healthy"
 
 msg_ok "Completed Successfully!\n"
-echo -e "${APP} is installed, you can check it's health by running:
-${BL}curl -XGET --insecure --fail --user $ELASTIC_USER:$ELASTIC_PASSWORD https://${IP}:$ELASTIC_PORT/_cluster/health?pretty${CL}
+echo -e "${APP} is installed, you can check it's health by opening (using the user and password generated for you):
+${BL}https://${IP}:$ELASTIC_PORT/_cluster/health?pretty${CL}
 Elasticsearch credentials are:
 User: ${BL}${ELASTIC_USER}${CL}
 Password: ${BL}${ELASTIC_PASSWORD}${CL}
