@@ -16,6 +16,8 @@ update_os
 
 msg_info "Installing Dependencies"
 $STD apt-get install -y curl
+$STD apt-get install -y sudo
+$STD apt-get install -y mc
 $STD apt-get install -y apt-transport-https
 $STD apt-get install -y gnupg
 msg_ok "Installed Dependencies"
